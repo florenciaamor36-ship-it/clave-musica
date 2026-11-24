@@ -60,7 +60,7 @@ fun PlayerScreen(
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = "Volver"
                         )
                     }
                 }
@@ -70,7 +70,7 @@ fun PlayerScreen(
         // Back Button
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
             IconButton(onClick = onNavigateBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
             }
         }
 
@@ -86,7 +86,7 @@ fun PlayerScreen(
             currentTrack?.let { track ->
                 AsyncImage(
                     model = track.imageUrl,
-                    contentDescription = "Album art",
+                    contentDescription = "Portada del álbum",
                     modifier = Modifier.size(200.dp)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -155,16 +155,16 @@ fun PlayerScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 IconButton(onClick = { viewModel.skipPrevious() }) {
-                    Icon(Icons.Default.SkipPrevious, "Previous")
+                    Icon(Icons.Default.SkipPrevious, "Anterior")
                 }
                 IconButton(onClick = { viewModel.togglePlayback() }) {
                     Icon(
                         imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
-                        contentDescription = if (isPlaying) "Pause" else "Play"
+                        contentDescription = if (isPlaying) "Pausar" else "Reproducir"
                     )
                 }
                 IconButton(onClick = { viewModel.skipNext() }) {
-                    Icon(Icons.Default.SkipNext, "Next")
+                    Icon(Icons.Default.SkipNext, "Siguiente")
                 }
             }
 
