@@ -1,71 +1,28 @@
-# Max Media Player 🎵
+# La Clave Música
 
-[![Kotlin Version](https://img.shields.io/badge/Kotlin-1.9.0-blue.svg)](https://kotlinlang.org)
-[![Android API](https://img.shields.io/badge/API-24%2B-brightgreen.svg)](https://developer.android.com/about/versions)
-[![License](https://img.shields.io/badge/License-Apache%202.0-orange.svg)](https://opensource.org/licenses/Apache-2.0)
+Aplicación Android en español para buscar y escuchar audio publicado en Internet Archive, basada en MaxMediaPlayer (Apache-2.0). El catálogo consulta la API pública de Internet Archive y filtra elementos de audio con licencia Creative Commons declarada y formato MP3.
 
-A modern Android music streaming app with offline capabilities, built using cutting-edge Android technologies following Clean Architecture principles.
+## Qué incluye esta preview
 
-<p align="center">
-  <img src="screenshots/app_demo.gif" width="300" alt="App Demo">
-</p>
+- Catálogo inicial y búsqueda por título, artista o tema.
+- Reproducción en streaming con controles en segundo plano.
+- Interfaz Android con Jetpack Compose y Media3.
+- Sin cuenta ni clave API requerida para las consultas públicas.
 
-## Features ✨
+## Límites importantes
 
-- 🎧 **Audio Streaming** from Jamendo API
-- 📥 **Offline Caching** with Room Database
-- 📑 **Playlist Management** (Create/Edit/Delete)
-- 🎮 **Media Controls** in Notification & Lock Screen
-- 🎨 **Material 3** Dynamic Theming
-- 🔍 **Search Functionality (Coming Soon)**
-- 🔄 **Background Audio Playback**
-- ♻️ **Network State Awareness (Coming Soon)** 
+No contiene el catálogo comercial de Spotify ni garantiza encontrar artistas o lanzamientos comerciales. Internet Archive incluye obras subidas por terceros: la aplicación filtra por metadatos de licencia declarados, pero el usuario debe revisar la ficha original y respetar las condiciones de cada obra. La disponibilidad puede variar por país o por cambios del servicio. No es una app probada en un teléfono hasta que se instale y reproduzca allí.
 
-## Tech Stack 🛠️
+## Desarrollo
 
-### Core Components
-| Component               | Technology                          |
-|-------------------------|-------------------------------------|
-| **UI Framework**        | Jetpack Compose                     |
-| **Audio Engine**        | Android Media3 (ExoPlayer)          |
-| **Database**           | Room + SQLite                       |
-| **DI Framework**       | Hilt with KSP                       |
-| **Networking**         | Retrofit 2 + OkHttp                 |
-| **Image Loading**      | Coil                                |
-| **Navigation**         | Compose Navigation                  |
+Requisitos: JDK 17, Android SDK 36 y Gradle wrapper incluido.
 
-### Architecture
-```
-com.mmk.maxmediaplayer/
-├── data/ # Data layer (Repositories, DAOs)
-├── domain/ # Business logic (Models, UseCases)
-├── ui/ # UI (Composables, ViewModels)
-├── di/ # Dependency Injection
-└── service/ # Background services
+```sh
+./gradlew assembleDebug
 ```
 
-## Screenshots 📱
+APK: `app/build/outputs/apk/debug/app-debug.apk`.
 
-<div style="display: flex; justify-content: space-between;">
-  <img src="screenshots/player_light.png" width="30%" alt="Player Light">
-  <img src="screenshots/playlist_view.png" width="30%" alt="Playlist View">
-  <img src="screenshots/player_dark.png" width="30%" alt="Player Dark">
-</div>
+## Créditos y licencia
 
-## Getting Started 🚀
-
-### Prerequisites
-- Android Studio Narwhal | 2025.1.1 Canary 8 or later
-- Android SDK 36
-- Jamendo API key (free tier available)
-
-### Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/MahabubKarim/MaxMediaPlayer.git
-2. Obtain a Jamendo API key from Jamendo Developer Portal
-
-3. Add your API key to local.properties: JAMENDO_API_KEY="your_api_key_here"
-4. Build and run the app!
-5. And Enjoy!
-<div align="center"> <p>Made with ❤️ for music lovers</p> <p>Give a ⭐ if you like this project!</p> </div>
+Esta versión parte de [MahabubKarim/MaxMediaPlayer](https://github.com/MahabubKarim/MaxMediaPlayer), distribuido bajo Apache License 2.0. Se conservan los avisos de copyright y la licencia original. Los cambios de esta adaptación se publican también bajo Apache-2.0. Internet Archive y los titulares de las obras conservan sus marcas y derechos respectivos.
