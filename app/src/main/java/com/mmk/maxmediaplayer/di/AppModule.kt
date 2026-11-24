@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.annotation.OptIn
 import androidx.media3.common.AudioAttributes
-import androidx.media3.common.BuildConfig
 import androidx.media3.common.C
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
@@ -15,7 +14,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.mmk.maxmediaplayer.MainActivity
 import com.mmk.maxmediaplayer.data.local.dao.TrackDao
-import com.mmk.maxmediaplayer.data.remote.api.JamendoApi
+import com.mmk.maxmediaplayer.data.remote.api.InternetArchiveApi
 import com.mmk.maxmediaplayer.data.repository.MusicRepositoryImpl
 import com.mmk.maxmediaplayer.domain.repository.MusicRepository
 import com.mmk.maxmediaplayer.service.NotificationAdapter
@@ -36,7 +35,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    private const val JAMENDO_BASE_URL = "https://api.jamendo.com/v3.0/"
+    private const val ARCHIVE_BASE_URL = "https://archive.org/"
 
     @Provides
     @Singleton
@@ -49,13 +48,6 @@ object AppModule {
             .connectTimeout(120, TimeUnit.SECONDS) // Connection timeout
             .readTimeout(120, TimeUnit.SECONDS)    // Read timeout
             .writeTimeout(120, TimeUnit.SECONDS)   // Write timeout
-            .apply {
-                if (BuildConfig.DEBUG) {
-                    addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BASIC
-                    })
-                }
-            }
             .build()
     }
 
@@ -63,7 +55,7 @@ object AppModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient, gson: Gson): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(JAMENDO_BASE_URL)
+            .baseUrl(ARCHIVE_BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
@@ -71,8 +63,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideJamendoApi(retrofit: Retrofit): JamendoApi {
-        return retrofit.create(JamendoApi::class.java)
+    fun provideInternetArchiveApi(retrofit: Retrofit): InternetArchiveApi {
+        return retrofit.create(InternetArchiveApi::class.java)
     }
 
     @Provides
@@ -136,7 +128,7 @@ object AppModule {
     @Singleton
     fun provideMusicRepository(
         @ApplicationContext context: Context,
-        api: JamendoApi,
+        api: InternetArchiveApi,
         trackDao: TrackDao
     ): MusicRepository {
         return MusicRepositoryImpl(context, api, trackDao)
