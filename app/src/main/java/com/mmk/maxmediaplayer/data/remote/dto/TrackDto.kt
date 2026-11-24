@@ -1,31 +1,28 @@
 package com.mmk.maxmediaplayer.data.remote.dto
 
+import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
 
 data class TrackDto(
-    @SerializedName("id") val id: String,
-    @SerializedName("name") val title: String,
-    @SerializedName("artist_name") val artist: String,
-    @SerializedName("duration") val duration: Int,
-    @SerializedName("audio") val audioUrl: String,
-    @SerializedName("image") val imageUrl: String
-)
+    @SerializedName("identifier") val id: String = "",
+    @SerializedName("title") val title: String? = null,
+    @SerializedName("creator") val creator: JsonElement? = null,
+    @SerializedName("licenseurl") val licenseUrl: String? = null
+) {
+    fun artistName(): String = when {
+        creator == null || creator.isJsonNull -> "Artista independiente"
+        creator.isJsonArray -> creator.asJsonArray.joinToString(", ") { it.asString }
+        creator.isJsonPrimitive -> creator.asString
+        else -> "Artista independiente"
+    }
+}
 
-/*
-fun toDomain(dto: TrackDto): Track = Track(
-    id = dto.id,
-    title = dto.title,
-    artist = dto.artist,
-    duration = dto.duration * 1000L,
-    audioUrl = dto.audioUrl,
-    imageUrl = dto.imageUrl
+data class ArchiveSearchResponse(@SerializedName("response") val response: ArchiveSearchResults? = null)
+data class ArchiveSearchResults(@SerializedName("docs") val docs: List<TrackDto> = emptyList())
+data class ArchiveMetadataDto(@SerializedName("files") val files: List<ArchiveFileDto> = emptyList())
+data class ArchiveFileDto(
+    @SerializedName("name") val name: String = "",
+    @SerializedName("format") val format: String = "",
+    @SerializedName("length") val length: String? = null,
+    @SerializedName("source") val source: String? = null
 )
-
-fun toDto(domain: Track): TrackDto = TrackDto(
-    id = domain.id,
-    title = domain.title,
-    artist = domain.artist,
-    duration = (domain.duration / 1000).toInt(),
-    audioUrl = domain.audioUrl,
-    imageUrl = domain.imageUrl
-)*/
