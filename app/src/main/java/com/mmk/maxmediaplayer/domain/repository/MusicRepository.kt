@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface MusicRepository {
     suspend fun getTracks(): List<Track>
     suspend fun getTracksPaginated(page: Int, size: Int): List<Track>
+    suspend fun searchTracks(query: String, page: Int, size: Int): List<Track>
     suspend fun getNextTrack(currentTrackId: String): Track?
     suspend fun getPreviousTrack(currentTrackId: String): Track?
     suspend fun fetchTracksFromNetwork(): List<Track>
