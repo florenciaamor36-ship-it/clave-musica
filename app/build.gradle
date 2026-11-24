@@ -11,7 +11,7 @@ android {
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.mmk.maxmediaplayer"
+        applicationId "com.laclave.musica"
         minSdk 26
         targetSdk 36
         versionCode 1
@@ -19,13 +19,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        def properties = new Properties()
-        def localProperties = rootProject.file("local.properties")
-        if (localProperties.exists()) {
-            properties.load(localProperties.newReader())
-        }
 
-        buildConfigField "String", "CLIENT_ID", "${properties.getProperty("JAMENDO_API_KEY", "")}"
     }
 
     buildTypes {
