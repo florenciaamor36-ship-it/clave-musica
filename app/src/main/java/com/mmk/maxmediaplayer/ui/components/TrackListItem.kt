@@ -69,7 +69,7 @@ fun TrackListItem(
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = "${track.artist} • ${track.duration.toTimeString()}",
+                text = "${track.artist} • Música con licencia abierta",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
