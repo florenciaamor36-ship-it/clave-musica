@@ -9,20 +9,18 @@ import com.mmk.maxmediaplayer.domain.model.Track
 object TrackMapper {
     fun toDomain(dto: TrackDto): Track = Track(
         id = dto.id,
-        title = dto.title,
-        artist = dto.artist,
-        duration = dto.duration * 1000L,
-        audioUrl = dto.audioUrl,
-        imageUrl = dto.imageUrl
+        title = dto.title?.takeIf { it.isNotBlank() } ?: "Sin título",
+        artist = dto.artistName(),
+        duration = 0L,
+        audioUrl = "",
+        imageUrl = "https://archive.org/services/img/${dto.id}"
     )
 
     fun toDto(domain: Track): TrackDto = TrackDto(
         id = domain.id,
         title = domain.title,
-        artist = domain.artist,
-        duration = (domain.duration / 1000).toInt(),
-        audioUrl = domain.audioUrl,
-        imageUrl = domain.imageUrl
+        creator = null,
+        licenseUrl = null
     )
 
     fun toEntity(domain: Track) = TrackEntity(
@@ -42,15 +40,14 @@ object TrackMapper {
         duration = entity.duration,
         audioUrl = entity.audioUrl,
         imageUrl = entity.imageUrl,
-        lastPlayed = entity.lastPlayed
+        lastPlayed = entity.lastPlayed,
+        isFavorite = entity.isFavorite
     )
 
-    fun toDomain(dto: PlaylistDto): Playlist {
-        return Playlist(
-            id = dto.id,
-            title = dto.name,
-            coverArtUrl = dto.imageUrl,
-            trackCount = dto.trackCount
-        )
-    }
+    fun toDomain(dto: PlaylistDto): Playlist = Playlist(
+        id = dto.id,
+        title = dto.name,
+        coverArtUrl = dto.imageUrl,
+        trackCount = dto.trackCount
+    )
 }
