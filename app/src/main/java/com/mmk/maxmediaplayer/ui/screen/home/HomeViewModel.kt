@@ -139,6 +139,25 @@ class HomeViewModel @OptIn(UnstableApi::class)
         loadInitialData()
     }
 
+    fun searchMusic(query: String) {
+        currentPage = 0
+        hasMore = false
+        viewModelScope.launch {
+            _uiState.value = HomeUiState.Loading
+            try {
+                val results = repository.searchTracks(query, 0, pageSize)
+                _uiState.value = HomeUiState.Success(
+                    tracks = results,
+                    featuredPlaylists = emptyList(),
+                    recentPlays = repository.getRecentPlays(),
+                    hasMore = false
+                )
+            } catch (e: Exception) {
+                _uiState.value = HomeUiState.Error(e.message ?: "No se pudo buscar música")
+            }
+        }
+    }
+
     private fun toPlaylistItem(playlist: Playlist): PlaylistItem {
         return PlaylistItem(
             id = playlist.id,
@@ -161,15 +180,13 @@ class HomeViewModel @OptIn(UnstableApi::class)
     @OptIn(UnstableApi::class)
     fun playTrack(track: Track) = viewModelScope.launch {
         // Fetch the full list and find the index of the requested track
-        val allTracks = repository.getAllTracksOnce()
-        val startIndex = allTracks.indexOfFirst { it.id == track.id }
-
-        if (startIndex != -1) {
-            // Let the service load the playlist and update its own state
-            playbackService.playPlaylist(allTracks, startIndex)
-        } else {
-            // Optionally handle the error case here, e.g.:
-            // Log.e("PlayerViewModel", "Track not found: ${track.id}")
+        try {
+            val audioUrl = repository.getTrackUrl(track.id)
+            val playableTrack = track.copy(audioUrl = audioUrl)
+            playbackService.play(playableTrack)
+            repository.addToRecentPlays(playableTrack)
+        } catch (e: Exception) {
+            _uiState.value = HomeUiState.Error(e.message ?: "No se pudo reproducir esta pista")
         }
     }
 
@@ -202,9 +219,7 @@ class HomeViewModel @OptIn(UnstableApi::class)
     fun togglePlayback() = viewModelScope.launch {
         if (currentTrack.value == null) {
             // no track loaded yet, fetch & play first one
-            repository.getAllTracksOnce().firstOrNull()?.let {
-                playbackService.playPlaylist(listOf(it), 0)
-            }
+            repository.getAllTracksOnce().firstOrNull()?.let { playTrack(it) }
         } else {
             // just flip play/pause
             if (_isPlaying.value) playbackService.pause()
